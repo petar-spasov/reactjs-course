@@ -1,9 +1,10 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useContext} from 'react';
 import classes from "./Cockpit.css";
+import AuthContext from '../../context/auth-context';
 
 const cockpit = (props) => {
-
-        const btnRef = useRef();
+    const btnRef = useRef();
+    const context = useContext(AuthContext);
 
     useEffect(() => {
         //**************Executed only when mounted
@@ -22,7 +23,7 @@ const cockpit = (props) => {
         //***********End
     }, []);
 
-    useEffect(()=> {
+    useEffect(() => {
         //Runs for every update
         console.log('[Cockpit.js] 2nd useEffect');
         return () => {
@@ -43,13 +44,15 @@ const cockpit = (props) => {
     }
 
 
-    return (<div className={classes.Cockpit}>
+    return (
+        <div className={classes.Cockpit}>
             <h1 className={assignedClasses.join(' ')}>Hello World</h1>
             <button className={btnClass}
                     onClick={props.toggle} ref={btnRef}>Switch Name
             </button>
-            <button onClick={props.login}>Hello</button>
             {/*{1 > 2 ? <p>hey hey</p> : <p>nono</p>}*/}
+            <button onClick={context.login}>Hello</button>
+
         </div>
     );
 };

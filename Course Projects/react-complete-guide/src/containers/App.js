@@ -3,7 +3,7 @@ import classes from './App.css';
 import People from "../components/People/People";
 import Cockpit from "../components/Cockpit/Cockpit";
 import withClass from "../hoc/withClass";
-
+import AuthContext from '../context/auth-context';
 class App extends Component {
 
     constructor(props) {
@@ -108,11 +108,12 @@ class App extends Component {
                     )
                 }}>Remove Cockpit
                 </button>
+                <AuthContext.Provider value={{authenticated: this.state.authenticated, login: this.loginHandler}}>
                 {this.state.showCockpit ? (<Cockpit showPeople={this.state.showPeople}
                                                     peopleLength={this.state.people.length}
-                                                    toggle={this.togglePersonHandler}
-                                                    login={this.loginHandler}/>) : null}
+                                                    toggle={this.togglePersonHandler}/>) : null}
                 {people}
+                </AuthContext.Provider>
             </React.Fragment>
 
         );
