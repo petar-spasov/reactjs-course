@@ -1,0 +1,24 @@
+.form {
+    width: 40%;
+    height: 600px;
+    margin: 1% auto;
+}
+
+.form form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2.5%;
+}
+
+.inputs {
+    width: 65%;
+    margin: 0.5% auto;
+}
+
+.loginBtn {
+    color:white;
+    margin: 1% auto;
+    width:65%;
+    height: 45px;
+    background: linear-gradient(to right, #de6262, #ffb88c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
