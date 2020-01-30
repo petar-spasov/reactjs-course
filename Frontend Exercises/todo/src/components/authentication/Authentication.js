@@ -16,9 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 //End Material UI
 import classes from './Authentication.module.css';
-import {
-    withStyles,
-} from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 
 /** Styled components should be outside the component so they won't get re-initialized
  * with every component rerender. If they do get re-initialized there is unexpected behaviour with inputs.

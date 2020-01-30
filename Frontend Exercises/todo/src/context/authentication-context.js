@@ -6,7 +6,7 @@ export const AuthenticationContext = React.createContext({
 });
 
 const AuthenticationContextProvider = props => {
-    const [isAuthed, setIsAuthed] = useState(false);
+    const [isAuthed, setIsAuthed] = useState(true);
 
     const loginHandler = (username, password) => {
         setIsAuthed(true);

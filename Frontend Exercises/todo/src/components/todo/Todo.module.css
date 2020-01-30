@@ -1,0 +1,29 @@
+.todo {
+    width: 100%;
+    height:100%;
+}
+
+.image {
+    height: 140px;
+}
+
+.cardActions {
+    float:right;
+}
+
+.containedButton {
+    color:white;
+    background-color: tomato;
+}
+
+.textButton {
+    color: tomato
+}
+
+.containedButton:hover {
+    background-color: #d66142;
+}
+
+.completed{
+    float:left;
+}

@@ -1,0 +1,53 @@
+.grid {
+    box-sizing: border-box;
+}
+
+.todoList {
+    font-family: 'Century Gotchic', sans-serif;
+    font-size: 4vw;
+    font-weight: 100;
+    color: white;
+}
+
+.gridWrapper {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1%;
+}
+
+.headerWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1%;
+}
+
+.addButton {
+    align-self: center;
+    color: white;
+    background-color: #45aaf3;
+    width: 10%;
+    height: 75px;
+}
+
+.addButton:hover {
+    background-color: #246ed7;
+}
+
+.fabButton {
+    margin: 2.5%;
+    background-color: #45aaf3;
+}
+
+.fabButton:hover {
+    background-color: #246ed7;
+}
+
+.addInput {
+    margin-top:1%;
+    width:100%;
+}
+
+.textButton {
+    color: tomato
+}
