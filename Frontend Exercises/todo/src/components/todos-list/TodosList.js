@@ -1,11 +1,10 @@
 import React from "react";
 
-const Home = () => {
+const TodosList = () => {
     return (
         <div>
-            hello home
         </div>
     )
 };
 
-export default Home;
+export default TodosList;
