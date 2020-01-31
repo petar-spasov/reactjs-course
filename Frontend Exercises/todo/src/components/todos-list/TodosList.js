@@ -1,20 +1,21 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios';
 
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import Fab from '@material-ui/core/Fab';
+import {GridList,GridListTile, Button, Fab
+    } from '@material-ui/core';
+
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
+
 import classes from './TodoList.module.css';
+import nextId from "react-id-generator";
 
 import Todo from "../todo/Todo"
 import FormDialog from "../form-dialog/FormDialog";
+import SnackbarMessages from '../snackbar/SnackbarMessages';
 
 const TodosList = () => {
 
+    //---------------------States---------------------//
     const initialDialogState = {
         editingTodo: false,
         editingTodoId: null,
@@ -23,7 +24,6 @@ const TodosList = () => {
         todoDescription: '',
         todoCompleted: false
     };
-
     const [allTodos, setTodos] = useState([]);
     const [showCompletedTodos, setShowCompleted] = useState(false);
     const [showIncompleteTodos, setShowIncomplete] = useState(true);
@@ -33,6 +33,7 @@ const TodosList = () => {
         message: ''
     });
     const [dialogState, setDialogState] = useState({...initialDialogState});
+    //---------------------States-End---------------------//
 
     useEffect(() => {
         axios.get('http://jsonplaceholder.typicode.com/todos?_limit=10').then((response) => {
@@ -43,18 +44,21 @@ const TodosList = () => {
     let incompleteTodos = allTodos.filter(todo => !todo.completed);
     let completeTodos = allTodos.filter(todo => todo.completed);
 
-
-    const saveTodo = (todoId) => {
+    //Method creates a new to-do with the values of the inputs which were saved in the dialog-state
+    const saveTodo = () => {
         let newAllTodos = allTodos.slice();
         newAllTodos.splice(0, 0, {
-            id: todoId,
+            id: nextId(),
             title: dialogState.todoTitle,
             description: dialogState.todoDescription,
             completed: dialogState.todoCompleted
         });
-        //No http request, because it won't be saved
+        //No http request, because JSON Placeholder doesn't save it anyways
         setTodos(newAllTodos);
+        //Close the dialog
         toggleAddDialog(false);
+        //Show success
+        toggleSnackbar(true, 'success', 'To-Do added successfully')
     };
 
     const updateTodo = () => {
@@ -216,12 +220,7 @@ const TodosList = () => {
             </div>
 
             {/*Snackbar for messages to the user*/}
-            <Snackbar open={snackbarState.open} autoHideDuration={5000}
-                      onClose={() => toggleSnackbar(false, 'success', '')}>
-                <MuiAlert onClose={() => toggleSnackbar(false, 'success', '')} severity={snackbarState.type}>
-                    {snackbarState.message}
-                </MuiAlert>
-            </Snackbar>
+            <SnackbarMessages snackbarState={snackbarState} toggleSnackbar={toggleSnackbar}/>
 
             {/*Dialog for adding task*/}
             <FormDialog dialogState={dialogState} toggleAddDialog={toggleAddDialog}

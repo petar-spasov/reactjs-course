@@ -1,47 +1,11 @@
 import React from "react";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+        FormControlLabel, Button} from '@material-ui/core';
+
 import classes from "./FormDialog.module.css";
-import Button from "@material-ui/core/Button";
-import {withStyles} from "@material-ui/core/styles";
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
 
-const StyledTextField = withStyles({
-    root: {
-        '& label.Mui-focused': {
-            color: 'tomato',
-        },
-        //incase you want different color when not focused
-        // '& input:valid + fieldset': {
-        // borderColor: 'tomato',
-        // borderWidth: 2,
-        // },
-        '& input:invalid + fieldset': {
-            borderColor: 'red',
-        },
-        '& input:valid:focus + fieldset': {
-            borderColor: 'tomato', // override inline-style
-        },
-        '& input:valid:hover + fieldset': {
-            borderColor: '#ef9a9a'
-        }
-    },
-})(TextField);
-
-const StyledCheckbox = withStyles({
-    root: {
-        color: 'tomato',
-        '&$checked': {
-            color: 'tomato',
-        },
-    },
-    checked: {},
-})(Checkbox);
+import StyledCheckbox from "../styled-mui-components/styled-checkbox/StyledCheckbox";
+import StyledTextField from "../styled-mui-components/styled-text-field/StyledTextField";
 
 const FormDialog = (props) => {
 

@@ -1,31 +1,14 @@
 import React from 'react';
 
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {
+    Card, CardActionArea, CardActions, CardContent, CardMedia, Button,
+    Typography, FormControlLabel
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import {withStyles} from '@material-ui/core/styles';
-
+import StyledCheckbox from "../styled-mui-components/styled-checkbox/StyledCheckbox";
 
 import classes from './Todo.module.css';
-
-
-const StyledCheckbox = withStyles({
-    root: {
-        color: 'tomato',
-        '&$checked': {
-            color: 'tomato',
-        },
-    },
-    checked: {},
-})(Checkbox);
 
 const Todo = props => {
 
@@ -49,13 +32,13 @@ const Todo = props => {
             </CardActionArea>
             <CardActions className={classes.cardActions}>
                 <FormControlLabel className={classes.completed}
-                    control={
-                        <StyledCheckbox
-                            checked={props.todo.completed}
-                            onChange={() => props.handleCompleted(props.todo)}
-                        />
-                    }
-                    label={props.todo.completed ? 'Remove from completed' : 'Complete'}
+                                  control={
+                                      <StyledCheckbox
+                                          checked={props.todo.completed}
+                                          onChange={() => props.handleCompleted(props.todo)}
+                                      />
+                                  }
+                                  label={props.todo.completed ? 'Remove from completed' : 'Complete'}
                 />
                 <Button
                     variant="contained"

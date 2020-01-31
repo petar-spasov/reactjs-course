@@ -1,84 +1,27 @@
 import React, {useContext, useState} from 'react';
 import {AuthenticationContext} from '../../context/authentication-context';
 //Materil UI
-import Paper from '@material-ui/core/Paper';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-//End Material UI
+import {
+    Paper,
+    InputLabel,
+    InputAdornment,
+    IconButton,
+    Button,
+    FormControlLabel,
+    FormHelperText
+} from '@material-ui/core';
+import {Visibility, VisibilityOff} from '@material-ui/icons';
+import {useHistory} from 'react-router-dom';
 import classes from './Authentication.module.css';
-import {withStyles} from '@material-ui/core/styles';
 
-/** Styled components should be outside the component so they won't get re-initialized
- * with every component rerender. If they do get re-initialized there is unexpected behaviour with inputs.
- */
-const StyledFormControl = withStyles({
-    root: {
-        '& label.Mui-focused': {
-            color: 'tomato',
-        },
+import StyledTextField from "../styled-mui-components/styled-text-field/StyledTextField";
+import StyledCheckbox from "../styled-mui-components/styled-checkbox/StyledCheckbox";
+import StyledOutlinedInput from "../styled-mui-components/styled-outlined-input/StyledOutlinedInput";
+import StyledFormControl from "../styled-mui-components/styled-form-control/StyledFormControl";
 
-    }
-})(FormControl);
-
-const StyledOutlinedInput = withStyles({
-    root: {
-        '& $notchedOutline': {
-            // borderColor: 'tomato'
-        },
-        '&:hover $notchedOutline': {
-            borderColor: '#ef9a9a'
-        },
-        '&$focused $notchedOutline': {
-            borderColor: 'tomato'
-        },
-    },
-    focused: {},
-    notchedOutline: {}
-})(OutlinedInput);
-
-const StyledCheckbox = withStyles({
-    root: {
-        color: 'tomato',
-        '&$checked': {
-            color: 'tomato',
-        },
-    },
-    checked: {},
-})(Checkbox);
-
-const StyledTextField = withStyles({
-    root: {
-        '& label.Mui-focused': {
-            color: 'tomato',
-        },
-        //incase you want different color when not focused
-        // '& input:valid + fieldset': {
-        // borderColor: 'tomato',
-        // borderWidth: 2,
-        // },
-        '& input:invalid + fieldset': {
-            borderColor: 'red',
-        },
-        '& input:valid:focus + fieldset': {
-            borderColor: 'tomato', // override inline-style
-        },
-        '& input:valid:hover + fieldset': {
-            borderColor: '#ef9a9a'
-        }
-    },
-})(TextField);
 
 const Authentication = props => {
+    let history = useHistory();
     const authenticationContext = useContext(AuthenticationContext);
 
 
@@ -124,7 +67,6 @@ const Authentication = props => {
 
     const loginHandler = () => {
         if (loginState.username === '' && passwordState.password === '') {
-            console.log("Both empty");
             setErrorsState({
                 usernameErrorsFound: true,
                 passwordErrorsFound: true,
@@ -134,7 +76,6 @@ const Authentication = props => {
                 }
             })
         } else if (loginState.username === '') {
-            console.log("Username empty");
             setErrorsState({
                 passwordErrorsFound: false,
                 usernameErrorsFound: true,
@@ -144,7 +85,6 @@ const Authentication = props => {
                 }
             })
         } else if (passwordState.password === '') {
-            console.log("Password empty");
             setErrorsState({
                 passwordErrorsFound: true,
                 usernameErrorsFound: false,
@@ -163,6 +103,7 @@ const Authentication = props => {
                 }
             });
             authenticationContext.login();
+            history.push("/");
         }
     };
     return (
@@ -198,9 +139,9 @@ const Authentication = props => {
                     <FormHelperText
                         id="component-error-text">{errorsState.passwordErrorsFound ? errorsState.errors.passwordError : ''}</FormHelperText>
                 </StyledFormControl>
-                <Button variant='contained' className={classes.loginBtn} onClick={loginHandler}>
-                    Login
-                </Button>
+                    <Button variant='contained' className={classes.loginBtn} onClick={loginHandler}>
+                        Login
+                    </Button>
                 <FormControlLabel
                     className={classes.checkbox}
                     control={
