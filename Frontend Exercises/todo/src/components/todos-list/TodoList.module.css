@@ -42,12 +42,3 @@
 .fabButton:hover {
     background-color: #246ed7;
 }
-
-.addInput {
-    margin-top:1%;
-    width:100%;
-}
-
-.textButton {
-    color: tomato
-}

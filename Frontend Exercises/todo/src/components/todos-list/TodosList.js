@@ -8,55 +8,21 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Fab from '@material-ui/core/Fab';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import {withStyles} from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-
-
-import Todo from "../todo/Todo"
-
 import classes from './TodoList.module.css';
 
-const StyledTextField = withStyles({
-    root: {
-        '& label.Mui-focused': {
-            color: 'tomato',
-        },
-        //incase you want different color when not focused
-        // '& input:valid + fieldset': {
-        // borderColor: 'tomato',
-        // borderWidth: 2,
-        // },
-        '& input:invalid + fieldset': {
-            borderColor: 'red',
-        },
-        '& input:valid:focus + fieldset': {
-            borderColor: 'tomato', // override inline-style
-        },
-        '& input:valid:hover + fieldset': {
-            borderColor: '#ef9a9a'
-        }
-    },
-})(TextField);
-
-
-const StyledCheckbox = withStyles({
-    root: {
-        color: 'tomato',
-        '&$checked': {
-            color: 'tomato',
-        },
-    },
-    checked: {},
-})(Checkbox);
+import Todo from "../todo/Todo"
+import FormDialog from "../form-dialog/FormDialog";
 
 const TodosList = () => {
+
+    const initialDialogState = {
+        editingTodo: false,
+        editingTodoId: null,
+        openDialog: false,
+        todoTitle: '',
+        todoDescription: '',
+        todoCompleted: false
+    };
 
     const [allTodos, setTodos] = useState([]);
     const [showCompletedTodos, setShowCompleted] = useState(false);
@@ -66,12 +32,7 @@ const TodosList = () => {
         type: 'success',
         message: ''
     });
-    const [dialogState, setDialogState] = useState({
-        openDialog: false,
-        todoTitle: '',
-        todoDescription: '',
-        todoCompleted: false
-    });
+    const [dialogState, setDialogState] = useState({...initialDialogState});
 
     useEffect(() => {
         axios.get('http://jsonplaceholder.typicode.com/todos?_limit=10').then((response) => {
@@ -83,16 +44,34 @@ const TodosList = () => {
     let completeTodos = allTodos.filter(todo => todo.completed);
 
 
-    const saveTodo = () => {
+    const saveTodo = (todoId) => {
         let newAllTodos = allTodos.slice();
         newAllTodos.splice(0, 0, {
+            id: todoId,
             title: dialogState.todoTitle,
             description: dialogState.todoDescription,
             completed: dialogState.todoCompleted
         });
         //No http request, because it won't be saved
         setTodos(newAllTodos);
-        toggleDialog(false);
+        toggleAddDialog(false);
+    };
+
+    const updateTodo = () => {
+        let todoToUpdate = allTodos.filter(todo => todo.id === dialogState.editingTodoId);
+        todoToUpdate[0].id = dialogState.editingTodoId;
+        todoToUpdate[0].title = dialogState.todoTitle;
+        todoToUpdate[0].description = dialogState.todoDescription;
+        todoToUpdate[0].completed = dialogState.todoCompleted;
+        setTodos(allTodos.map((todo) => {
+            if (todo.id !== todoToUpdate.id) {
+                return todo;
+            } else {
+                return {...todoToUpdate};
+            }
+        }));
+        toggleEditDialog(false, null);
+        toggleSnackbar(true, 'success', 'To-Do updated successfully')
     };
 
     const deleteTodo = (todo) => {
@@ -157,13 +136,30 @@ const TodosList = () => {
         setShowIncomplete(!showIncompleteTodos);
     };
 
-    //For test push
+    const toggleAddDialog = (open) => {
+        if (!open) {
+            setDialogState({...initialDialogState});
+        } else {
+            setDialogState({
+                ...dialogState,
+                openDialog: open
+            });
+        }
+    };
 
-    const toggleDialog = (open) => {
-        setDialogState({
-            ...dialogState,
-            openDialog: open
-        });
+    const toggleEditDialog = (open, todo) => {
+        if (!open) {
+            setDialogState({...initialDialogState});
+        } else {
+            setDialogState({
+                editingTodo: true,
+                editingTodoId: todo.id,
+                openDialog: open,
+                todoTitle: todo.title,
+                todoDescription: todo.description,
+                todoCompleted: todo.completed
+            });
+        }
     };
 
     const completedTasksView = (
@@ -174,7 +170,7 @@ const TodosList = () => {
                     return (
                         <GridListTile key={todoDesc.id}>
                             <Todo todo={todoDesc} handleCompleted={handleCompleted}
-                                  deleteTodo={deleteTodo}/>
+                                  deleteTodo={deleteTodo} editTodo={toggleEditDialog}/>
                         </GridListTile>
                     );
                 })}
@@ -189,7 +185,7 @@ const TodosList = () => {
                 return (
                     <GridListTile key={todoDesc.id}>
                         <Todo todo={todoDesc} handleCompleted={handleCompleted}
-                              deleteTodo={deleteTodo}/>
+                              deleteTodo={deleteTodo} editTodo={toggleEditDialog}/>
                     </GridListTile>
                 );
             })}
@@ -200,7 +196,7 @@ const TodosList = () => {
         <React.Fragment>
             <div className={classes.headerWrapper}>
                 <h1 className={classes.todoList}>Todos</h1>
-                <Button variant="contained" className={classes.addButton} onClick={() => toggleDialog(true)}>
+                <Button variant="contained" className={classes.addButton} onClick={() => toggleAddDialog(true)}>
                     Add To-Do
                 </Button>
             </div>
@@ -220,45 +216,19 @@ const TodosList = () => {
             </div>
 
             {/*Snackbar for messages to the user*/}
-            <Snackbar open={snackbarState.open} autoHideDuration={6000}
-                      onClose={() => toggleSnackbar(false, '', 'success')}>
-                <MuiAlert onClose={() => toggleSnackbar(false, '', '')} severity={snackbarState.type}>
+            <Snackbar open={snackbarState.open} autoHideDuration={5000}
+                      onClose={() => toggleSnackbar(false, 'success', '')}>
+                <MuiAlert onClose={() => toggleSnackbar(false, 'success', '')} severity={snackbarState.type}>
                     {snackbarState.message}
                 </MuiAlert>
             </Snackbar>
 
             {/*Dialog for adding task*/}
-            <Dialog open={dialogState.openDialog} onClose={() => toggleDialog(false)}
-                    aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add new To-Do</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Create a new task by filling out the following fields.
-                    </DialogContentText>
-                    <StyledTextField label='Title' className={classes.addInput} onChange={todoTitleInputHandler()}
-                                     variant='outlined'/>
-                    <StyledTextField label='Short description' className={classes.addInput}
-                                     onChange={todoDescriptionInputHandler()}
-                                     variant='outlined'/>
-
-                    <FormControlLabel
-                        control={
-                            <StyledCheckbox checked={dialogState.todoCompleted}
-                                            onChange={todoCompletedCheckboxHandler}
-                                            label='Completed'/>
-                        }
-                        label='Task completed'
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => toggleDialog(false)} color="primary" className={classes.textButton}>
-                        Cancel
-                    </Button>
-                    <Button onClick={() => saveTodo()} color="primary" className={classes.textButton}>
-                        Save
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <FormDialog dialogState={dialogState} toggleAddDialog={toggleAddDialog}
+                        todoTitleInputHandler={todoTitleInputHandler}
+                        todoDescriptionInputHandler={todoDescriptionInputHandler}
+                        todoCompletedCheckboxHandler={todoCompletedCheckboxHandler}
+                        persistTodo={dialogState.editingTodo ? updateTodo : saveTodo}/>
 
         </React.Fragment>
     )

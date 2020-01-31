@@ -61,7 +61,8 @@ const Todo = props => {
                     variant="contained"
                     color="secondary"
                     className={classes.containedButton}
-                    startIcon={<Edit/>}>
+                    startIcon={<Edit/>}
+                    onClick={() => props.editTodo(true, props.todo)}>
                     Edit
                 </Button>
                 <Button
