@@ -1,7 +1,7 @@
-import React, {useContext} from "react";
-import {AppBar, Toolbar, Typography, Button} from "@material-ui/core";
-import {AuthenticationContext} from "../../context/authentication-context";
-import {Link} from 'react-router-dom';
+import React, { useContext } from "react";
+import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
+import { AuthenticationContext } from "../../context/authentication-context";
+import { Link } from 'react-router-dom';
 import classes from './NavagationBar.module.css';
 
 const NavigationBar = () => {
@@ -14,7 +14,11 @@ const NavigationBar = () => {
                     ToDoiFyLy
                 </Typography>
                 <Link to={authenticationContext.isAuthenticated ? "/logout" : "/"} className={classes.link}>
-                    <Button color="inherit" onClick={authenticationContext.logout}>{authenticationContext.isAuthenticated ? "Logout" : "Login"}</Button>
+                    <Button color="inherit"
+                            onClick={authenticationContext.logout}
+                    >
+                        {authenticationContext.isAuthenticated ? "Logout" : "Login"}
+                    </Button>
                 </Link>
             </Toolbar>
         </AppBar>

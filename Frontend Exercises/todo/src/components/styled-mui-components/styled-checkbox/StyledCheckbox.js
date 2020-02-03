@@ -1,5 +1,5 @@
-import {withStyles} from "@material-ui/core/styles";
-import {Checkbox} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { Checkbox } from "@material-ui/core";
 
 const StyledCheckbox = withStyles({
     root: {

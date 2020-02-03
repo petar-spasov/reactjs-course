@@ -1,28 +1,29 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 
-import {GridList,GridListTile, Button, Fab
-    } from '@material-ui/core';
+import {
+    GridList, GridListTile, Button, Fab,
+} from '@material-ui/core';
 
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 
 import classes from './TodoList.module.css';
 import nextId from "react-id-generator";
 
-import Todo from "../todo/Todo"
+import Todo from "../todo/Todo";
 import FormDialog from "../form-dialog/FormDialog";
 import SnackbarMessages from '../snackbar/SnackbarMessages';
 
 const TodosList = () => {
 
-    //---------------------States---------------------//
+    // ---------------------States--------------------- //
     const initialDialogState = {
         editingTodo: false,
         editingTodoId: null,
         openDialog: false,
         todoTitle: '',
         todoDescription: '',
-        todoCompleted: false
+        todoCompleted: false,
     };
     const [allTodos, setTodos] = useState([]);
     const [showCompletedTodos, setShowCompleted] = useState(false);
@@ -30,10 +31,10 @@ const TodosList = () => {
     const [snackbarState, setSnackbarState] = useState({
         open: false,
         type: 'success',
-        message: ''
+        message: '',
     });
-    const [dialogState, setDialogState] = useState({...initialDialogState});
-    //---------------------States-End---------------------//
+    const [dialogState, setDialogState] = useState({ ...initialDialogState });
+    // ---------------------States-End--------------------- //
 
     useEffect(() => {
         axios.get('http://jsonplaceholder.typicode.com/todos?_limit=10').then((response) => {
@@ -41,28 +42,28 @@ const TodosList = () => {
         });
     }, []);
 
-    let incompleteTodos = allTodos.filter(todo => !todo.completed);
-    let completeTodos = allTodos.filter(todo => todo.completed);
+    const incompleteTodos = allTodos.filter(todo => !todo.completed);
+    const completeTodos = allTodos.filter(todo => todo.completed);
 
-    //Method creates a new to-do with the values of the inputs which were saved in the dialog-state
+    // Method creates a new to-do with the values of the inputs which were saved in the dialog-state
     const saveTodo = () => {
-        let newAllTodos = allTodos.slice();
+        const newAllTodos = allTodos.slice();
         newAllTodos.splice(0, 0, {
             id: nextId(),
             title: dialogState.todoTitle,
             description: dialogState.todoDescription,
-            completed: dialogState.todoCompleted
+            completed: dialogState.todoCompleted,
         });
-        //No http request, because JSON Placeholder doesn't save it anyways
+        // No http request, because JSON Placeholder doesn't save it anyways
         setTodos(newAllTodos);
-        //Close the dialog
+        // Close the dialog
         toggleAddDialog(false);
-        //Show success
-        toggleSnackbar(true, 'success', 'To-Do added successfully')
+        // Show success
+        toggleSnackbar(true, 'success', 'To-Do added successfully');
     };
 
     const updateTodo = () => {
-        let todoToUpdate = allTodos.filter(todo => todo.id === dialogState.editingTodoId);
+        const todoToUpdate = allTodos.filter(todo => todo.id === dialogState.editingTodoId);
         todoToUpdate[0].id = dialogState.editingTodoId;
         todoToUpdate[0].title = dialogState.todoTitle;
         todoToUpdate[0].description = dialogState.todoDescription;
@@ -70,35 +71,33 @@ const TodosList = () => {
         setTodos(allTodos.map((todo) => {
             if (todo.id !== todoToUpdate.id) {
                 return todo;
-            } else {
-                return {...todoToUpdate};
             }
+            return { ...todoToUpdate };
         }));
         toggleEditDialog(false, null);
-        toggleSnackbar(true, 'success', 'To-Do updated successfully')
+        toggleSnackbar(true, 'success', 'To-Do updated successfully');
     };
 
     const deleteTodo = (todo) => {
-        axios.delete('http://jsonplaceholder.typicode.com/todos/' + todo.id).then((response) => {
+        axios.delete(`http://jsonplaceholder.typicode.com/todos/${todo.id}`).then(() => {
             setTodos(allTodos.filter(todoState => todoState.id !== todo.id));
             toggleSnackbar(true, "success", "To-Do successfully deleted.");
         }).catch((error) => {
-            toggleSnackbar(true, "error", error.message)
-        })
+            toggleSnackbar(true, "error", error.message);
+        });
     };
 
     const handleCompleted = (todo) => {
         setTodos(allTodos.map((todoState) => {
             if (todoState.id !== todo.id) {
                 return todoState;
-            } else {
-                toggleSnackbar(true, "success", todo.title + " successfully completed.");
-                return {
-                    ...todoState,
-                    completed: !todo.completed
-                }
             }
-        }))
+            toggleSnackbar(true, "success", `${todo.title} successfully completed.`);
+            return {
+                ...todoState,
+                completed: !todo.completed,
+            };
+        }));
     };
 
     const todoTitleInputHandler = () => event => {
@@ -116,19 +115,19 @@ const TodosList = () => {
     };
 
     const todoCompletedCheckboxHandler = () => {
-        setDialogState(prevState => {
-            return {
+        setDialogState(prevState => (
+            {
                 ...dialogState,
                 todoCompleted: !prevState.todoCompleted,
             }
-        });
+        ));
     };
 
     const toggleSnackbar = (open, type, message) => {
         setSnackbarState({
-            open: open,
-            type: type,
-            message: message
+            open,
+            type,
+            message,
         });
     };
 
@@ -142,18 +141,18 @@ const TodosList = () => {
 
     const toggleAddDialog = (open) => {
         if (!open) {
-            setDialogState({...initialDialogState});
+            setDialogState({ ...initialDialogState });
         } else {
             setDialogState({
                 ...dialogState,
-                openDialog: open
+                openDialog: open,
             });
         }
     };
 
     const toggleEditDialog = (open, todo) => {
         if (!open) {
-            setDialogState({...initialDialogState});
+            setDialogState({ ...initialDialogState });
         } else {
             setDialogState({
                 editingTodo: true,
@@ -161,7 +160,7 @@ const TodosList = () => {
                 openDialog: open,
                 todoTitle: todo.title,
                 todoDescription: todo.description,
-                todoCompleted: todo.completed
+                todoCompleted: todo.completed,
             });
         }
     };
@@ -170,11 +169,15 @@ const TodosList = () => {
         <div>
             <GridList className={classes.grid} cols={5} cellHeight={300} spacing={4}>
                 {completeTodos.map((completedTodo) => {
-                    let todoDesc = {description: 'Very complex description omg. This way to complicated call NASA', ...completedTodo};
+                    const todoDesc = {
+                        description: 'Very complex description omg. This way to complicated call NASA',
+                        ...completedTodo,
+                    };
                     return (
                         <GridListTile key={todoDesc.id}>
                             <Todo todo={todoDesc} handleCompleted={handleCompleted}
-                                  deleteTodo={deleteTodo} editTodo={toggleEditDialog}/>
+                                  deleteTodo={deleteTodo} editTodo={toggleEditDialog}
+                            />
                         </GridListTile>
                     );
                 })}
@@ -185,11 +188,15 @@ const TodosList = () => {
     const incompletedTasksView = (
         <GridList className={classes.grid} cols={5} cellHeight={300} spacing={4}>
             {incompleteTodos.map((todo) => {
-                let todoDesc = {description: 'Very complex description omg. This way to complicated call NASA', ...todo};
+                const todoDesc = {
+                    description: 'Very complex description omg. This way to complicated call NASA',
+                    ...todo,
+                };
                 return (
                     <GridListTile key={todoDesc.id}>
                         <Todo todo={todoDesc} handleCompleted={handleCompleted}
-                              deleteTodo={deleteTodo} editTodo={toggleEditDialog}/>
+                              deleteTodo={deleteTodo} editTodo={toggleEditDialog}
+                        />
                     </GridListTile>
                 );
             })}
@@ -197,7 +204,7 @@ const TodosList = () => {
     );
 
     return (
-        <React.Fragment>
+        <>
             <div className={classes.headerWrapper}>
                 <h1 className={classes.todoList}>Todos</h1>
                 <Button variant="contained" className={classes.addButton} onClick={() => toggleAddDialog(true)}>
@@ -206,31 +213,34 @@ const TodosList = () => {
             </div>
             <div className={classes.gridWrapper}>
                 <Fab variant="extended" color="primary" aria-label="add" className={classes.fabButton}
-                     onClick={toggleIncomplete}>
+                     onClick={toggleIncomplete}
+                >
                     <ArrowDownward/>
                     Show incomplete tasks
                 </Fab>
                 {showIncompleteTodos ? incompletedTasksView : null}
                 <Fab variant="extended" color="primary" aria-label="add" className={classes.fabButton}
-                     onClick={toggleCompleted}>
+                     onClick={toggleCompleted}
+                >
                     <ArrowDownward/>
                     Show completed tasks
                 </Fab>
                 {showCompletedTodos ? completedTasksView : null}
             </div>
 
-            {/*Snackbar for messages to the user*/}
+            {/* Snackbar for messages to the user */}
             <SnackbarMessages snackbarState={snackbarState} toggleSnackbar={toggleSnackbar}/>
 
-            {/*Dialog for adding task*/}
+            { /* Dialog for adding task */}
             <FormDialog dialogState={dialogState} toggleAddDialog={toggleAddDialog}
                         todoTitleInputHandler={todoTitleInputHandler}
                         todoDescriptionInputHandler={todoDescriptionInputHandler}
                         todoCompletedCheckboxHandler={todoCompletedCheckboxHandler}
-                        persistTodo={dialogState.editingTodo ? updateTodo : saveTodo}/>
+                        persistTodo={dialogState.editingTodo ? updateTodo : saveTodo}
+            />
 
-        </React.Fragment>
-    )
+        </>
+    );
 };
 
 export default TodosList;

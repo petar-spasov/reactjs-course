@@ -7,14 +7,14 @@ const StyledOutlinedInput = withStyles({
             // borderColor: 'tomato'
         },
         '&:hover $notchedOutline': {
-            borderColor: '#ef9a9a'
+            borderColor: '#ef9a9a',
         },
         '&$focused $notchedOutline': {
-            borderColor: 'tomato'
+            borderColor: 'tomato',
         },
     },
     focused: {},
-    notchedOutline: {}
+    notchedOutline: {},
 })(OutlinedInput);
 
 export default StyledOutlinedInput;

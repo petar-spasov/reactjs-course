@@ -1,12 +1,12 @@
-import {withStyles} from "@material-ui/core/styles";
-import {TextField} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { TextField } from "@material-ui/core";
 
 const StyledTextField = withStyles({
     root: {
         '& label.Mui-focused': {
             color: 'tomato',
         },
-        //incase you want different color when not focused
+        // incase you want different color when not focused
         // '& input:valid + fieldset': {
         // borderColor: 'tomato',
         // borderWidth: 2,
@@ -18,8 +18,8 @@ const StyledTextField = withStyles({
             borderColor: 'tomato', // override inline-style
         },
         '& input:valid:hover + fieldset': {
-            borderColor: '#ef9a9a'
-        }
+            borderColor: '#ef9a9a',
+        },
     },
 })(TextField);
 
