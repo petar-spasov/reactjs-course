@@ -48,7 +48,7 @@ const Authentication = props => {
         setPasswordState({...passwordState, password: event.target.value})
     };
 
-    const handleUsernameIpput = () => event => {
+    const handleUsernameInput = () => event => {
         setLoginState({...loginState, username: event.target.value})
     };
 
@@ -113,7 +113,7 @@ const Authentication = props => {
                                  error={errorsState.usernameErrorsFound}
                                  variant='outlined'
                                  helperText={errorsState.usernameErrorsFound ? errorsState.errors.usernameError : ''}
-                                 onChange={handleUsernameIpput()}/>
+                                 onChange={handleUsernameInput()}/>
                 <StyledFormControl variant='outlined' className={classes.inputs}
                                    error={errorsState.passwordErrorsFound}>
                     <InputLabel htmlFor='outlined-adornment-password'>Password</InputLabel>

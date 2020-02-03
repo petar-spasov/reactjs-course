@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {Card, CardContent, Typography, TextField, Button} from '@material-ui/core';
 import classes from './Forecast.module.css'
 import {withStyles} from "@material-ui/core";
 import axios from "axios";
@@ -19,21 +15,49 @@ const StyledCard = withStyles({
     }
 })(Card);
 
+const StyledTextField = withStyles({
+    root: {
+        '& label.Mui-focused': {
+            color: 'white',
+        },
+        '& label': {
+            color: 'white',
+        },
+        // incase you want different color when not focused
+        '& input:valid + fieldset': {
+            borderColor: 'white',
+            color: 'white'
+        },
+        '& input:invalid + fieldset': {
+            borderColor: 'red',
+        },
+        '& input:valid:focus + fieldset': {
+            color: 'white',
+            borderColor: 'white', // override inline-style
+        },
+        '& input:valid:hover + fieldset': {
+            borderColor: 'white'
+        },
+        '& input:focus': {
+            color: 'white'
+        },
+        '& input': {
+            color: 'white'
+        },
+    },
+})(TextField);
+
 const Forecast = () => {
 
     const [weatherData, setWeatherData] = useState({
-        city: null,
-        tempList: null
+        city: {},
+        tempList: []
     });
 
-    const [avgDaily, setAvgDaily] = useState([])
+    const [inputData, setInputData] = useState("");
 
-    const groupBy = key => array =>
-        array.reduce((objectsByKeyValue, obj) => {
-            const value = obj[key];
-            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-            return objectsByKeyValue;
-        }, {});
+    const days = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
+
 
     useEffect(() => {
         axios.get("https://api.openweathermap.org/data/2.5/forecast?q=Munich&units=metric&appid=e0a4f6b1a0cf8f031a408f633fc68d75").then(response => {
@@ -46,100 +70,73 @@ const Forecast = () => {
                     };
                 })
             });
-
-            const groupByDate = groupBy('dt');
-            let timeConverted = response.data.list.map((item) => {
-                let finalDate = new Date(item.dt * 1000);
-                return {
-                    ...item,
-                    dt: finalDate.toLocaleDateString()
-                };
-            });
-
-            let objectToArray = [];
-            let obj = {...groupByDate(timeConverted)};
-            objectToArray.push(Object.keys(obj).map(value => {
-                return obj[value];
-            }));
-            let allAverages = [];
-            for (let i = 0; i < objectToArray.length; i++) {
-                for (let j = 0; j < objectToArray[i].length; j++) {
-                    //THree dimensional array
-                    let sum = 0;
-                    sum += objectToArray[i][j];
-                    console.log("Sum", sum);
-                    let average = sum / objectToArray[i].length;
-                    console.log(objectToArray[i][j]);
-                    console.log(average);
-                    // allAverages.push({})
-                }
-            }
-            console.log(objectToArray)
         })
     }, []);
 
+    const getConvertedTime = (duration) => {
+        let minutes = Math.floor((duration / (1000 * 60)) % 60);
+        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        hours = (hours < 10) ? "0" + hours : hours;
+        return hours + ":" + minutes;
+    };
+
+    const handleCityInput = () => event => {
+        setInputData(event.target.value);
+    };
+
+    const getTempForCity = () => {
+        axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${inputData}&units=metric&appid=e0a4f6b1a0cf8f031a408f633fc68d75`).then(response => {
+            setWeatherData({
+                city: response.data.city,
+                tempList: response.data.list.map((item) => {
+                    return {
+                        ...item,
+                        dt: new Date(item.dt * 1000)
+                    };
+                })
+            });
+            console.log(response)
+        }).catch(error => {
+            console.log(error.response);
+            alert("Network error occured: " + error.response.data.message);
+        })
+    };
 
     return (
-        <div className={classes.forecastWrapper}>
-            <StyledCard className={classes.card}>
-                <CardContent>
-                    <Typography variant="h1" color="textSecondary" gutterBottom>
-                        MO
-                    </Typography>
-                    <Typography variant="body2" component="h2">
-                        well meaning and kindly.
-                    </Typography>
-                </CardContent>
-            </StyledCard>
-            <StyledCard className={classes.card}>
-                <CardContent>
-                    <Typography variant="h1" color="textSecondary" gutterBottom>
-                        DI
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                        well meaning and kindly.
-                        <br/>
-                        {'"a benevolent smile"'}
-                    </Typography>
-                </CardContent>
-            </StyledCard>
-            <StyledCard className={classes.card}>
-                <CardContent>
-                    <Typography variant="h1" color="textSecondary" gutterBottom>
-                        MI
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                        well meaning and kindly.
-                        <br/>
-                        {'"a benevolent smile"'}
-                    </Typography>
-                </CardContent>
-            </StyledCard>
-            <StyledCard className={classes.card}>
-                <CardContent>
-                    <Typography variant="h1" color="textSecondary" gutterBottom>
-                        DO
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                        well meaning and kindly.
-                        <br/>
-                        {'"a benevolent smile"'}
-                    </Typography>
-                </CardContent>
-            </StyledCard>
-            <StyledCard className={classes.card}>
-                <CardContent>
-                    <Typography variant="h1" color="textSecondary" gutterBottom>
-                        FR
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                        well meaning and kindly.
-                        <br/>
-                        {'"a benevolent smile"'}
-                    </Typography>
-                </CardContent>
-            </StyledCard>
-        </div>)
+        <React.Fragment>
+            <div className={classes.headerWrapper}>
+                <p className={classes.location}>{weatherData.city.name + " " + weatherData.city.country}</p>
+                <StyledTextField id="filled-basic" label="Input you city" variant="outlined" className={classes.input}
+                                 value={inputData} onChange={handleCityInput()}/>
+                <Button variant='contained' className={classes.searchBtn} onClick={getTempForCity}>
+                    Search city
+                </Button>
+            </div>
+            <div className={classes.forecastWrapper}>
+                {weatherData.tempList.map((tempItem) => {
+                    return (
+                        <StyledCard className={classes.card} key={tempItem.dt}>
+                            <CardContent>
+                                <Typography variant="h1" gutterBottom>
+                                    {days[tempItem.dt.getDay()]}
+                                </Typography>
+                                <Typography variant="body2" component="h2">
+                                    {tempItem.dt.getDate().toString() + "." + (tempItem.dt.getMonth() + 1) + "." + tempItem.dt.getFullYear().toString()}
+                                </Typography>
+                                <Typography variant="body2" component="h2">
+                                    Temperature at: {getConvertedTime(tempItem.dt.getTime())}
+                                </Typography>
+                                <Typography variant="h2" component="h2">
+                                    {tempItem.main.temp}°
+                                </Typography>
+                            </CardContent>
+                        </StyledCard>
+                    );
+                })
+                }
+            </div>
+        </React.Fragment>)
 };
 
 export default Forecast;
