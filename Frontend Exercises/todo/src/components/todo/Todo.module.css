@@ -13,11 +13,11 @@
 
 .containedButton {
     color:white;
-    background-color: tomato;
+background-color: tomato;
 }
 
 .textButton {
-    color: tomato
+    color: tomato;
 }
 
 .containedButton:hover {

@@ -1,4 +1,4 @@
-import {withStyles} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 
 const StyledOutlinedInput = withStyles({
