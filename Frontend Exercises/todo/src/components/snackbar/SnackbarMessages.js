@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 
 const SnackbarMessages = (props) => (
     <Snackbar open={props.snackbarState.open} autoHideDuration={5000}
-              onClose={() => props.toggleSnackbar(false, 'success', '')}>
+              onClose={() => props.toggleSnackbar(false, 'success', '')}
+    >
         <MuiAlert onClose={() => props.toggleSnackbar(false, 'success', '')} severity={props.snackbarState.type}>
             {props.snackbarState.message}
         </MuiAlert>

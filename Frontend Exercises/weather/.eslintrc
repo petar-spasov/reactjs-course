@@ -5,6 +5,7 @@
     "plugin:flowtype/recommended"
   ],
   "plugins": [
+    "react-hooks",
     "react",
     "jsx-a11y",
     "flowtype",
@@ -160,25 +161,5 @@
     "global-require": 0,
     // lodash optimizations
     // Reduce lodash check levels from error to warning (by now), to allow a gradual refactor
-    "you-dont-need-lodash-underscore/is-undefined": "warn",
-    "you-dont-need-lodash-underscore/for-each": "warn",
-    "you-dont-need-lodash-underscore/concat": "warn",
-    "you-dont-need-lodash-underscore/is-null": "warn",
-    "you-dont-need-lodash-underscore/split": "warn",
-    "you-dont-need-lodash-underscore/omit": "warn",
-    "you-dont-need-lodash-underscore/replace": "warn",
-    "you-dont-need-lodash-underscore/trim": "warn",
-    "you-dont-need-lodash-underscore/index-of": "warn",
-    "you-dont-need-lodash-underscore/is-array": "warn",
-    "you-dont-need-lodash-underscore/slice": "warn",
-    "you-dont-need-lodash-underscore/last": "warn",
-    "you-dont-need-lodash-underscore/starts-with": "warn",
-    "you-dont-need-lodash-underscore/assign": "warn",
-    "you-dont-need-lodash-underscore/flatten": "warn",
-    "you-dont-need-lodash-underscore/drop-right": "warn",
-    "you-dont-need-lodash-underscore/drop": "warn",
-    "you-dont-need-lodash-underscore/last-index-of": "warn",
-    "you-dont-need-lodash-underscore/join": "warn",
-    "you-dont-need-lodash-underscore/uniq": "warn"
   }
 }

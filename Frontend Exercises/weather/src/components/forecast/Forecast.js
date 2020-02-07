@@ -95,10 +95,11 @@ const Forecast = () => {
                     dt: new Date(item.dt * 1000),
                 })),
             });
-        }).catch(error => {
+        }).catch(error =>
             // Okay ab iz kenni alerts meh, nummeno ds mau :)
-            alert(`Network error occured: ${error.response.data.message}`);
-        });
+            // alert(`Network error occured: ${error.response.data.message}`);
+             error
+        );
     };
 
     return (

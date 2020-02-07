@@ -1,13 +1,12 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "airbnb",
-    "plugin:flowtype/recommended"
+    "airbnb"
   ],
   "plugins": [
+    "react-hooks",
     "react",
     "jsx-a11y",
-    "flowtype",
     "mocha"
   ],
   "parserOptions": {
@@ -104,7 +103,8 @@
     "react/jsx-fragments": 1,
     "react/jsx-curly-newline": 1,
     "react/jsx-props-no-spreading": 1,
-    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "wrap-iife": [
       2,
       "any"
@@ -160,25 +160,6 @@
     "global-require": 0,
     // lodash optimizations
     // Reduce lodash check levels from error to warning (by now), to allow a gradual refactor
-    "you-dont-need-lodash-underscore/is-undefined": "warn",
-    "you-dont-need-lodash-underscore/for-each": "warn",
-    "you-dont-need-lodash-underscore/concat": "warn",
-    "you-dont-need-lodash-underscore/is-null": "warn",
-    "you-dont-need-lodash-underscore/split": "warn",
-    "you-dont-need-lodash-underscore/omit": "warn",
-    "you-dont-need-lodash-underscore/replace": "warn",
-    "you-dont-need-lodash-underscore/trim": "warn",
-    "you-dont-need-lodash-underscore/index-of": "warn",
-    "you-dont-need-lodash-underscore/is-array": "warn",
-    "you-dont-need-lodash-underscore/slice": "warn",
-    "you-dont-need-lodash-underscore/last": "warn",
-    "you-dont-need-lodash-underscore/starts-with": "warn",
-    "you-dont-need-lodash-underscore/assign": "warn",
-    "you-dont-need-lodash-underscore/flatten": "warn",
-    "you-dont-need-lodash-underscore/drop-right": "warn",
-    "you-dont-need-lodash-underscore/drop": "warn",
-    "you-dont-need-lodash-underscore/last-index-of": "warn",
-    "you-dont-need-lodash-underscore/join": "warn",
-    "you-dont-need-lodash-underscore/uniq": "warn"
+
   }
 }
